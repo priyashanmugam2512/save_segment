@@ -14,7 +14,7 @@ export default function Segment_popup({ onCancel }) {
     { label: 'City', value: 'city' },
     { label: 'State', value: 'state' }
   ];
-  let link="https://webhook.site/e78d4f76-7264-4294-bd34-ec94a283a88d"
+  let link = "https://webhook.site/e78d4f76-7264-4294-bd34-ec94a283a88d"
   const handleAddSchema = () => {
     if (newSchema && !selectedSchemas.includes(newSchema)) {
       setSelectedSchemas([...selectedSchemas, newSchema]);
@@ -27,7 +27,7 @@ export default function Segment_popup({ onCancel }) {
     updatedSchemas.splice(index, 1);
     setSelectedSchemas(updatedSchemas);
   };
-  function postData(e){
+  function postData(e) {
     e.preventDefault();
     console.log("Segment Name:", segmentName);
     console.log("Selected Schemas:", selectedSchemas);
@@ -36,7 +36,7 @@ export default function Segment_popup({ onCancel }) {
       schema: selectedSchemas.map(schema => ({ [schema.value]: schema.label }))
     };
     console.log(data)
-    axios.post(link,data)
+    axios.post(link, data)
     alert("Your segment are save successfully");
   }
   return (
@@ -78,7 +78,7 @@ export default function Segment_popup({ onCancel }) {
                         ))}
                     </select>
                     <div className='remove_btn_section'>
-                      <span class="material-symbols-outlined"onClick={() => handleRemoveSchema(index)}>
+                      <span class="material-symbols-outlined" onClick={() => handleRemoveSchema(index)}>
                         remove
                       </span>
                     </div>
@@ -99,25 +99,23 @@ export default function Segment_popup({ onCancel }) {
                     ))}
                 </select>
                 <div className='remove_btn_section'>
-                      <span className="material-symbols-outlined"onClick={() => handleRemoveSchema}>
-                        remove
-                      </span>
-                    </div>
+                  <span className="material-symbols-outlined" onClick={() => handleRemoveSchema}>
+                    remove
+                  </span>
+                </div>
               </div>
               <div className='add_new_schema_link'>
                 <a onClick={handleAddSchema}><span className='plus_icon'>+</span><span className='text_add_new'>Add new schema</span></a>
               </div>
             </div>
           </div>
-            <div className='save_btn_section'>
-                <button type="submit">Save the segment</button>
-            </div>
-          
+          <div className='save_btn_section'>
+            <button type="submit">Save the segment</button>
+          </div>
         </form>
         <div className='cancel_btn_section'>
-            <button className='canel_btn' onClick={onCancel}>Cancel</button>
-            </div>
-
+          <button className='canel_btn' onClick={onCancel}>Cancel</button>
+        </div>
       </div>
     </>
 
