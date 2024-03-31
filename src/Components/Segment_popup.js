@@ -1,5 +1,5 @@
-import axios from 'axios';
 import React, { useState } from 'react'
+import { Await } from 'react-router-dom';
 
 export default function Segment_popup({ onCancel }) {
   const [segmentName, setSegmentName] = useState('');
@@ -27,17 +27,26 @@ export default function Segment_popup({ onCancel }) {
     updatedSchemas.splice(index, 1);
     setSelectedSchemas(updatedSchemas);
   };
-  function postData(e) {
+  async function postData(e) {
     e.preventDefault();
-    console.log("Segment Name:", segmentName);
-    console.log("Selected Schemas:", selectedSchemas);
-    const data = {
-      segment_name: segmentName,
-      schema: selectedSchemas.map(schema => ({ [schema.value]: schema.label }))
-    };
-    console.log(data)
-    axios.post(link, data)
-    alert("Your segment are save successfully");
+    try {
+      console.log('selectedSchemas', selectedSchemas)
+      const response = await fetch(link, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          segment_name: segmentName,
+          schema: selectedSchemas.map(schema => ({ [schema]: schemaOptions.find(option => option.value === schema).label }))
+        })
+      });
+      alert('Your segment is saved successfully')
+    } catch (error) {
+      console.error('Error:', error);
+    }
   }
   return (
     <>
@@ -49,7 +58,7 @@ export default function Segment_popup({ onCancel }) {
         <form onSubmit={postData}>
           <div className='input_segment_section'>
             <label htmlFor='name'>Enter the Name of the Segment</label>
-            <input type='text' id='name' placeholder="Name of the Segment" value={segmentName} onChange={(e) => setSegmentName(e.target.value)} />
+            <input type='text' id='name' placeholder="Name of the Segment" value={segmentName} onChange={(e) => setSegmentName(e.target.value)} required />
           </div>
           <div className='drop_down_section'>
             <p className='note_text'>To save  your segment, you need to add the schemas to build the query</p>
@@ -78,7 +87,7 @@ export default function Segment_popup({ onCancel }) {
                         ))}
                     </select>
                     <div className='remove_btn_section'>
-                      <span class="material-symbols-outlined" onClick={() => handleRemoveSchema(index)}>
+                      <span className="material-symbols-outlined" onClick={() => handleRemoveSchema(index)}>
                         remove
                       </span>
                     </div>
@@ -90,7 +99,7 @@ export default function Segment_popup({ onCancel }) {
                 <select
                   value={newSchema}
                   onChange={(e) => setNewSchema(e.target.value)}
-                >
+                  >
                   <option value="" disabled>Add schema to segment</option>
                   {schemaOptions
                     .filter(option => !selectedSchemas.includes(option.value))
